@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form';
+import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
 
 const renderInput = (field) => {
@@ -18,7 +19,9 @@ const renderInput = (field) => {
 class Signup extends Component {
     handleFormSubmit(formProps) {
         // Call action creator to sign up the user
-        this.props.signupUser(formProps);
+        this.props.signupUser(formProps, () =>{
+          this.props.history.push('/');
+        });
     }
 
     renderAlert() {

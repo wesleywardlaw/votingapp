@@ -1,10 +1,21 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
 
-export function signinUser({ email, password } ){
+
+export function fetchPolls(){
+	const request = axios.get(${ROOT_URL}/polls);
+
+	return{
+		type: FETCH_POSTS;
+		payload: request;
+	}
+}
+
+
+export function signinUser({ email, password }, callback ){
 	//redux-thunk lets you return a function isntead of an object, this function has access to dispatch
 	return function(dispatch){
 		//Submit e-mail/password to the server
@@ -18,7 +29,8 @@ export function signinUser({ email, password } ){
 					//localStorage is on the scope of the window, allows storage to user's hdd/ssd/whatever
 				localStorage.setItem('token', response.data.token);
 				//- redirect to the router /feature
-				browserHistory.push("/feature");
+				// history.push("/feature");
+				callback();
 			})
 
 
@@ -30,15 +42,16 @@ export function signinUser({ email, password } ){
 	}
 }
 
-export function signupUser({email,password}){
+export function signupUser({email,password}, callback){
 	return function(dispatch){
 		axios.post(`${ROOT_URL}/signup`, {email, password})
-			.then( response =>{
+			.then( (response) =>{
 				dispatch({type: AUTH_USER});
 				localStorage.setItem('token', response.data.token);
-				browserHistory.push("/feature");
+				// history.push("/feature");
+				callback();
 			})
-			.catch( response => dispatch(authError(response.data.error)))
+			.catch( response =>dispatch(authError(response.data.error)))   
 	}
 }
 

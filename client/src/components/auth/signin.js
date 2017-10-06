@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { reduxForm, Field, Form } from 'redux-form';
 import * as actions from '../../actions';
 
@@ -15,7 +16,9 @@ const renderInput = field => {
 class Signin extends Component {
     handleFormSubmit({ email, password }) {
    
-        this.props.signinUser({ email, password });
+        this.props.signinUser({ email, password }, () => {
+        	this.props.history.push('/');
+        });
     }
 
     renderAlert() {
