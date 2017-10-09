@@ -1,3 +1,16 @@
 .error{
 	color:red;
 }
+
+
+.card{
+	margin-top: 20px;
+}
+
+.btn-warning{
+	margin-right: 10px;
+}
+
+/*input[value]{
+	padding: 10px;
+}*/

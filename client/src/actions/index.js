@@ -1,18 +1,37 @@
 import axios from 'axios';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE } from './types';
+import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE, FETCH_POLLS, FETCH_POLL } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
 
 
 export function fetchPolls(){
-	const request = axios.get(${ROOT_URL}/polls);
+	return function(dispatch){
+		axios.get(`${ROOT_URL}/polls`)
+			.then(response => {
+				dispatch({
+					type: FETCH_POLLS,
+					payload: //{
+						// 1:{_id:1, title:'Who is the best super hero?', options:['Spider-Man', 'Superman', 'Batman', 'Flash']},
+						// 2:{_id:2, title:'What is the best book?', options:['The Hobbit', 'The Catcher in the Rye', 'The Giver']},
+						// 3:{_id:3, title:'What is the best video game?', options:['Crackdown', 'Super Mario World', 'Darksiders', 'Stardew Valley']}
+						response.data
 
-	return{
-		type: FETCH_POSTS;
-		payload: request;
+					//} 
+				});
+			});
 	}
 }
+
+export function fetchPoll(id){
+	const request = axios.get(`${ROOT_URL}/polls/${id}`);
+
+	return{
+		type: FETCH_POLL,
+		payload: request
+	};
+}
+
 
 
 export function signinUser({ email, password }, callback ){

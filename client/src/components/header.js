@@ -31,11 +31,32 @@ class Header extends Component{
 
 	render(){
 		return(
-			<nav className = "navbar navbar-light">
-				<Link to="/" className="navbar-brand">Redux Auth</Link>
-				<ul className = "nav navbar-nav">
-					{this.renderLinks()}
-				</ul>
+			// <nav className="navbar navbar-expand-lg navbar-dark bg-primary rounded">
+			//   <Link to="/" className="navbar-brand">Vote Your Mind</Link>
+			//   <ul class="navbar-nav mr-auto">
+			//     <li class="nav-item active">
+			//       <a class="nav-link">Left Link 1</a>
+			//     </li>
+			//   </ul>
+			//   <ul class="navbar-nav ml-auto">
+			//   	{this.renderLinks()}
+			//   </ul>
+			// </nav>
+
+			<nav className="navbar navbar-expand-lg navbar-light">
+			  <Link to="/" className="navbar-brand">Vote Your Mind</Link>
+			  <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			    <span className="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div className="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul className="navbar-nav mr-auto">
+			     
+			    </ul>
+			    <ul className="navbar-nav">
+			      {this.renderLinks()}
+			    </ul>
+			  </div>
 			</nav>
 		);
 	}
