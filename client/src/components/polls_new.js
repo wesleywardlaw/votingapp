@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 import * as actions from '../actions';
@@ -26,33 +26,44 @@ return (
 )
 }
 
-let PollsNew = props => {
 
 
+class PollsNew extends Component {
 
-  const { array: { push },handleSubmit, load, pristine, reset, submitting } = props
-  console.log(push);
-  return (
-    <form onSubmit={handleSubmit}>
-     
-      <div className="form-group">
-        <label>Title</label>
-        <div>
-          <Field name="title" component="input" type="text" placeholder=" title" className="form-control"/>
-        </div>
-      </div>
-      
-      <div className="form-group">
-        <label>Options</label>
-        <FieldArray name="options" component={renderOptions} />
-      </div>
-      
-      <div>
-        <button type="submit" disabled={pristine || submitting}>Submit</button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>
-      </div>
-    </form>
-  )
+  onSubmit(values){
+  		console.log(values);
+		this.props.createPoll(values, () => {
+			this.props.history.push('/');
+		});
+	}
+
+  render(){
+  	  const { array: { push },handleSubmit, load, pristine, reset, submitting } = this.props
+      console.log(push);
+	  return (
+	    <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+	     
+	      <div className="form-group">
+	        <label>Title</label>
+	        <div>
+	          <Field name="title" component="input" type="text" placeholder=" title" className="form-control"/>
+	        </div>
+	      </div>
+	      
+	      <div className="form-group">
+	        <label>Options</label>
+	        <FieldArray name="options" component={renderOptions} />
+	      </div>
+	      
+	      <div>
+	        <button type="submit" disabled={pristine || submitting}>Submit</button>
+	        <button type="button" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>
+	      </div>
+	    </form>
+	  )
+  }
+
+
 }
 
 // Decorate with reduxForm(). It will read the initialValues prop provided by connect()

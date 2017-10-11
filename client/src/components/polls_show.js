@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchPoll } from '../actions';
+import { fetchPoll, deletePoll } from '../actions';
 import { Link } from 'react-router-dom';
 
 class PollsShow extends Component{
@@ -8,6 +8,13 @@ class PollsShow extends Component{
 	componentDidMount(){
 		const { id } = this.props.match.params;
 		this.props.fetchPoll(id);
+	}
+
+	onDeleteClick(){
+		const { id } = this.props.match.params;
+		this.props.deletePoll(id, () =>{
+			this.props.history.push('/');
+		});
 	}
 
 	render(){
@@ -23,7 +30,7 @@ class PollsShow extends Component{
 				
 				<button
 					className="btn btn-danger float-right"
-					onClick = {console.log("hi")}
+					onClick = {this.onDeleteClick.bind(this)}
 				>
 					Delete Poll
 				</button>
@@ -36,7 +43,7 @@ class PollsShow extends Component{
 							<ul className="list-group">
 								{poll.options.map( (option, index) => {
 									return(
-										<li className="list-group-item">{option.text} <button className="btn btn-primary float-right">Vote</button></li>
+										<li className="list-group-item" key={index}>{option.text} <button className="btn btn-primary float-right">Vote</button></li>
 									);
 								})}
 							</ul>
@@ -52,7 +59,7 @@ class PollsShow extends Component{
 function mapStateToProps({ polls }, ownProps){
 	return {poll:polls[ownProps.match.params.id]};
 }
-export default connect(mapStateToProps, { fetchPoll })(PollsShow);
+export default connect(mapStateToProps, { fetchPoll, deletePoll })(PollsShow);
 
 
 

@@ -25,8 +25,15 @@ exports.fetchPolls = function(req,res){
 exports.createPoll = function(req,res){
 		//get data from form and add to polls array
 		var title = req.body.title;
-		var options = req.body.options;
-		
+		var options = req.body.options.map(option => {
+			return(
+			{
+				text: option,
+				votecount: 0
+			}
+			);
+		});
+
 		console.log(req.user);
 		var author = {
 			id: req.user._id,
@@ -59,4 +66,15 @@ exports.fetchPoll = function(req, res){
     });
 }
 
+
+//DESTROY ROUTE
+exports.deletePoll = function(req,res){
+	Poll.findByIdAndRemove(req.params.id, function(err){
+		if(err){
+			console.log(err);
+		} else{
+			res.status(200).send('success');
+		}
+	});
+}
 

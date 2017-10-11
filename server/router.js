@@ -19,6 +19,8 @@ module.exports = function(app){
 	//CREATE ROUTE - add new poll to db
 	app.post("/polls", requireAuth, Polls.createPoll);
 
+	app.delete("/polls/:id", requireAuth, Polls.deletePoll);
+
 
 
 	app.post("/signin", requireSignIn, Authentication.signin);
