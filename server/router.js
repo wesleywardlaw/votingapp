@@ -12,21 +12,27 @@ module.exports = function(app){
 		res.send({message: 'Super secret code 123'});
 	})
 
+	app.get('/user', requireAuth, Authentication.getUser);
+
 	app.get("/polls", Polls.fetchPolls);
 
 	app.get("/polls/:id", Polls.fetchPoll);
 
-	//CREATE ROUTE - add new poll to db
+	app.put("/polls/:id/newoption", Polls.addNewOption);
+
+	app.put("/polls/:id/:option", Polls.addVote);
+
 	app.post("/polls", requireAuth, Polls.createPoll);
+
+	app.put("/polls/:id", requireAuth, Polls.editPoll);
 
 	app.delete("/polls/:id", requireAuth, Polls.deletePoll);
 
-
-
 	app.post("/signin", requireSignIn, Authentication.signin);
+	
 	app.post("/signup", Authentication.signup);
 
-	app.post("/test", requireAuth, Authentication.test);
+	
 
 
 	

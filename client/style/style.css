@@ -11,6 +11,10 @@
 	margin-right: 10px;
 }
 
+.btn-primary{
+	margin-right: 10px;
+}
+
 .polls{
 	margin-top: 20px;
 }
@@ -19,6 +23,18 @@
 	margin-bottom: 50px;
 }
 
-/*input[value]{
-	padding: 10px;
-}*/
+div h1{
+	text-align: center;
+}
+
+.list-group{
+	margin-bottom: 10px;
+}
+
+.card-body .list-group{
+	margin-bottom: 20px;
+}
+
+form .btn{
+	margin-top:10px;
+}

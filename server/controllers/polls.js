@@ -53,6 +53,23 @@ exports.createPoll = function(req,res){
 	};
 
 
+exports.addVote = function(req,res){
+	Poll.findById(req.params.id, function(err, poll){
+		if(err){
+			console.log(err);
+		} else{
+			poll.options[req.params.option].votecount+=1;
+			poll.save(function(err){
+				if(err){
+					console.log(err);
+				} else{
+					res.send(poll);
+				}
+			});
+		}
+	});
+}
+
 //SHOW ROUTE
 
 exports.fetchPoll = function(req, res){
@@ -66,6 +83,57 @@ exports.fetchPoll = function(req, res){
     });
 }
 
+
+exports.editPoll = function(req,res){
+	var title = req.body.title;
+
+	var author = {
+		id: req.user._id,
+		email: req.user.email
+	};
+
+	var options = req.body.options.map(option => {
+		return(
+			{
+				text: option,
+				votecount: 0
+			}
+		);
+	});
+	
+	var newPoll = {title:title, options: options, author:author};
+	//find and update correct blog
+	Poll.findByIdAndUpdate(req.params.id, newPoll, function(err, foundPoll){
+		if(err){
+			console.log(err);
+		} else{
+			res.status(200).send('success');
+		}
+	});
+}
+
+exports.addNewOption = function(req,res){
+	console.log(req.body);
+	var newOption = {
+		text: req.body.newOption,
+		votecount: 0
+	}
+	Poll.findById(req.params.id, function(err, poll){
+		if(err){
+			console.log(err);
+		} else{
+			poll.options.push(newOption);
+			poll.save(function(err){
+				if(err){
+					console.log(err);
+				} else{
+					res.send(poll);
+				}
+			});
+		}
+	});
+
+}
 
 //DESTROY ROUTE
 exports.deletePoll = function(req,res){

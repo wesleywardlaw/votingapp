@@ -7,10 +7,16 @@ class Header extends Component{
 
 	renderLinks(){
 		if(this.props.authenticated){
-			//show link to sign out
-			return <li className="nav-item">
-				<Link to="/signout" className="nav-link">Sign out</Link>
-			</li>
+			//show link to sign out and link to mypolls
+			return [
+				<li className = "nav-item" key={1}>
+					<Link to="/mypolls" className="nav-link">My Polls</Link>
+				</li>,
+				<li className="nav-item" key={2}>
+					<Link to="/signout" className="nav-link">Sign out</Link>
+				</li>
+			];
+
 		} else{
 			//show link to sign in or sign up
 				//returning array so that we don't have to add in extra html elements to be able to return multiple lis
@@ -24,25 +30,10 @@ class Header extends Component{
 			];
 
 		}
-
-		
 	}
-
 
 	render(){
 		return(
-			// <nav className="navbar navbar-expand-lg navbar-dark bg-primary rounded">
-			//   <Link to="/" className="navbar-brand">Vote Your Mind</Link>
-			//   <ul class="navbar-nav mr-auto">
-			//     <li class="nav-item active">
-			//       <a class="nav-link">Left Link 1</a>
-			//     </li>
-			//   </ul>
-			//   <ul class="navbar-nav ml-auto">
-			//   	{this.renderLinks()}
-			//   </ul>
-			// </nav>
-
 			<nav className="navbar navbar-expand-lg navbar-light">
 			  <Link to="/" className="navbar-brand">Vote Your Mind</Link>
 			  <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

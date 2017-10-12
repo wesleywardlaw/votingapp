@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 
 
+
 const renderOptions=({ fields }) =>{
 		
 
@@ -13,19 +14,15 @@ const renderOptions=({ fields }) =>{
 
 
 		  <ul className="list-group">
-		    {console.log(fields)}
 		  	<li className="list-group-item">
 		         <button className="btn btn-primary" type="button" onClick={() => fields.push('option', {})}>Add Option</button>
 		         <button className="btn btn-danger" type="button" onClick={() => fields.pop('option', {})}>Remove Option</button>
 		     </li>
 
 		    {fields.map((field, index) => {
-		    	console.log(field, " is so weird");
-		    	console.log(index);
 		    	return(
 		    		<div>
 		    			<li className="list-group-item"><Field name={field} component={renderField}  placeholder="option" className="form-control" /></li>
-						
 					</div>
 				);
 		    })}
@@ -34,8 +31,6 @@ const renderOptions=({ fields }) =>{
 
 		)
 	}
-
-
 
 	const renderField = (field) =>{
 		const { meta: { touched, error } } = field;
@@ -54,44 +49,68 @@ const renderOptions=({ fields }) =>{
 		);
 	}
 
-class PollsNew extends Component {
 
-	
 
+
+class PollsEdit extends Component {
+
+
+  componentDidMount(){
+		this.props.fetchPolls();
+		const { id } = this.props.match.params;
+		console.log(this.props.match.params.id);
+		this.props.fetchPoll(id);
+
+	}
 
   onSubmit(values){
+  		console.log(this.props);
   		console.log(values);
-		this.props.createPoll(values, () => {
-			this.props.history.push('/');
+  		const { id } = this.props.match.params;
+  		console.log(id);
+		this.props.editPoll(values, id, () => {
+			this.props.history.push(`/polls/${id}`);
 		});
 	}
 
+
+
   render(){
-  	  const { array: { push },handleSubmit, load, pristine, reset, submitting } = this.props
-     
-     
+  		if(!(this.props.polls)){
+  			return(
+  				<div>
+  					Loading...
+  				</div>
+
+  			);
+
+  		} else {
+  		const { array: { push },handleSubmit, load, pristine, reset, submitting } = this.props
 	  return (
 	    <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 	     
-	      
+	     
+	   
 	          <Field name="title" component={renderField} type="text" placeholder=" title" className="form-control"/>
-	      
+	     
 	      
 	     
 	        <FieldArray name="options" component={renderOptions} />
 	      
 	      
 	      
-	        <button  className ="btn btn-primary" type="submit" disabled={pristine || submitting}>Submit</button>
+	        <button className = "btn btn-primary" type="submit" disabled={pristine || submitting}>Submit</button>
 	        <button className = "btn btn-warning" type="button" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>
 	      
 	    </form>
-	  )
+	  );
+
+  		}
+  
   }
 
 
 }
-
 
 
 function validate(values){
@@ -115,21 +134,24 @@ function validate(values){
     return errors;
 }
 
-PollsNew = reduxForm({
+// Decorate with reduxForm(). It will read the initialValues prop provided by connect()
+PollsEdit = reduxForm({
   form: 'initializeFromState',
-  validate,
- initialValues: {  
-  title: 'title',
-  options: [ 'option', 'option', 'option', 'option' ]
-} 
-})(PollsNew)
+  validate
+})(PollsEdit)
 
-
-PollsNew = connect(
+PollsEdit = connect(
   
-   null
-  ,
-  actions              
-)(PollsNew)
+  (state, ownProps) =>{
 
-export default PollsNew
+  		var title = state.polls[ownProps.match.params.id].title;
+  		var newoptions = state.polls[ownProps.match.params.id].options.map( options => {return options.text});
+   return ({
+    initialValues: {title: title, options: newoptions},
+    polls:state.polls 
+  }) }
+  ,
+  actions               
+)(PollsEdit)
+
+export default PollsEdit;

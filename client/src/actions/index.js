@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE, FETCH_POLLS, FETCH_POLL, CREATE_POLL, DELETE_POLL } from './types';
+import { 
+		AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE, FETCH_POLLS, FETCH_POLL,
+		CREATE_POLL, DELETE_POLL, EDIT_POLL, FETCH_USER, ADD_VOTE, ALREADY_VOTED, NEW_OPTION 
+	   } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
 
@@ -11,13 +14,8 @@ export function fetchPolls(){
 			.then(response => {
 				dispatch({
 					type: FETCH_POLLS,
-					payload: //{
-						// 1:{_id:1, title:'Who is the best super hero?', options:['Spider-Man', 'Superman', 'Batman', 'Flash']},
-						// 2:{_id:2, title:'What is the best book?', options:['The Hobbit', 'The Catcher in the Rye', 'The Giver']},
-						// 3:{_id:3, title:'What is the best video game?', options:['Crackdown', 'Super Mario World', 'Darksiders', 'Stardew Valley']}
+					payload: 
 						response.data
-
-					//} 
 				});
 			});
 	}
@@ -29,29 +27,13 @@ export function fetchPoll(id){
 			.then(response => {
 				dispatch({
 					type: FETCH_POLL,
-					payload: //{
-						// 1:{_id:1, title:'Who is the best super hero?', options:['Spider-Man', 'Superman', 'Batman', 'Flash']},
-						// 2:{_id:2, title:'What is the best book?', options:['The Hobbit', 'The Catcher in the Rye', 'The Giver']},
-						// 3:{_id:3, title:'What is the best video game?', options:['Crackdown', 'Super Mario World', 'Darksiders', 'Stardew Valley']}
+					payload: 
 						response.data
-
-					//} 
 				});
 			});
 	}
 }
 
-
-
-// export function fetchPoll(id){
-// 	const request = axios.get(`${ROOT_URL}/polls/${id}`);
-
-// 	return{
-
-// 		type: FETCH_POLL,
-// 		payload: request
-// 	};
-// }
 
 export function createPoll(values, callback){
 	return function(dispatch){
@@ -60,8 +42,23 @@ export function createPoll(values, callback){
 		})
 			.then(response => {
 				dispatch({
-					type: FETCH_MESSAGE,
-					payload: response.data.message
+					type: CREATE_POLL,
+					payload: response.data
+				});
+				callback();
+			})
+	}
+}
+
+export function editPoll(values, id, callback){
+	return function(dispatch){
+		axios.put(`${ROOT_URL}/polls/${id}`, values, {
+			headers: {authorization: localStorage.getItem('token')}
+		})
+			.then(response => {
+				dispatch({
+					type: EDIT_POLL,
+					payload: response.data
 				});
 				callback();
 			})
@@ -81,15 +78,65 @@ export function deletePoll(id, callback){
 	}
 }
 
-// export function createPoll(values, callback){
-// 	const request = axios.post(`${ROOT_URL}/polls`, {headers: {authorization: localStorage.getItem('token')}}, values)
-// 		.then(() => callback());
 
-// 	return{
-// 		type: CREATE_POLL,
-// 		payload: request
-// 	};
-// }
+export function addNewOption(id, values, callback){
+	return function(dispatch){
+		axios.put(`${ROOT_URL}/polls/${id}/newoption`, values)
+			.then(response => {
+				dispatch({
+					type: NEW_OPTION,
+					payload: response.data
+				});
+				callback();
+			});
+	}
+
+}
+
+export function addVote(id, option){
+	if(localStorage.getItem('votes')!==null){
+		var array = JSON.parse(localStorage.getItem('votes'));
+		if(array.indexOf(id)>-1){
+			return function(dispatch){
+				dispatch({
+					type: ALREADY_VOTED,
+					payload:null
+				});
+			}
+		}
+		array.push(id);
+		localStorage.setItem('votes', JSON.stringify(array));
+	} else{
+		var array = [id];
+		localStorage.setItem('votes', JSON.stringify(array));
+	}
+	return function(dispatch){
+		axios.put(`${ROOT_URL}/polls/${id}/${option}`)
+			.then(response => {
+			
+				dispatch({
+					type: ADD_VOTE,
+					payload: response.data
+				});
+
+			});
+	}
+}
+
+
+export function fetchUser(callback){
+	return function(dispatch){
+		axios.get(`${ROOT_URL}/user`, {headers: {authorization: localStorage.getItem('token')}})
+			.then(response => {
+				dispatch({
+					type: FETCH_USER,
+					payload: 
+						response.data
+				});
+				callback();
+			});
+	}
+}
 
 
 export function signinUser({ email, password }, callback ){

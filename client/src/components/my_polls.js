@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { Link } from 'react-router-dom';
 
-class PollsIndex extends Component{
+class MyPolls extends Component{
 
 	componentDidMount(){
 		this.props.fetchPolls()
@@ -12,14 +12,25 @@ class PollsIndex extends Component{
 
 
 	renderPolls(){
+		const { id } = this.props.match.params;
+			if(this.props.authenticated){
+				this.props.fetchUser(() =>{
+				console.log(this.props.user);
+			});
+		}
 		return _.map(this.props.polls, poll => {
-			return(
-				<li className="list-group-item polls" key={poll._id}>
+			if(this.props.user==poll.author.id){
+				return(
+					
+						<li className="list-group-item polls" key={poll._id}>
 						<Link to={`/polls/${poll._id}`}>
 							{poll.title}
 						</Link>
-				</li>
-			);
+						</li>
+					
+				
+				);
+			}
 		});
 	}
 
@@ -28,7 +39,7 @@ class PollsIndex extends Component{
 			if(this.props.authenticated){
 				return(
 					<div>
-						<Link className="btn btn-primary" to={"/polls/new"}>Create New Poll</Link>
+						
 						{this.renderPolls()}
 						
 					</div>
@@ -46,10 +57,10 @@ class PollsIndex extends Component{
 }
 
 function mapStateToProps(state){
-	return {polls: state.polls, authenticated:state.auth.authenticated};
+	return {polls: state.polls, authenticated:state.auth.authenticated, user:state.auth.user};
 }
 
-export default connect(mapStateToProps, actions)(PollsIndex);
+export default connect(mapStateToProps, actions)(MyPolls);
 
 
 
