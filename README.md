@@ -2,7 +2,7 @@
 
 This is a RESTful application that uses React, Redux, Passport, MongoDB, Express, and Node to allow users to create and share polls.
 
-[Deployed Example](http://voteyourmind.herokuapp.com/)
+[Deployed Example](https://voteyourmind.herokuapp.com/)
 
 It was designed according to the user stories on Free Code Camp:
 
