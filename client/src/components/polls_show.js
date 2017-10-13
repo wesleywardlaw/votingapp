@@ -9,6 +9,13 @@ class PollsShow extends Component{
 	componentDidMount(){
 		const { id } = this.props.match.params;
 		this.props.fetchPoll(id);
+		if(this.props.authenticated){
+			if(this.props.authenticated){
+				this.props.fetchUser(() =>{
+				});
+			}
+		}
+		
 	}
 
 	onDeleteClick(){
@@ -29,7 +36,6 @@ class PollsShow extends Component{
 		const { id } = this.props.match.params;
 			if(this.props.authenticated){
 				this.props.fetchUser(() =>{
-				console.log(this.props.user);
 			});
 		}
 		
@@ -52,10 +58,18 @@ class PollsShow extends Component{
 	
 	}
 
+	renderNewOptions(){
+		const { id } = this.props.match.params;
+		if(this.props.authenticated){
+			return(
+				<Link className="btn btn-primary" to ={`/polls/${id}/newoption`}>Add a New Option</Link>
+			);
+		}
+	}
+
 	render(){
 		const { poll } = this.props;
 		const { id } = this.props.match.params;
-		console.log(this.props.authenticated);
 
 
 		if(!poll){
@@ -67,7 +81,6 @@ class PollsShow extends Component{
 		const labelvotecount = poll.options.map( count => {
 			return count.votecount;
 		});
-		console.log("this is ",opt);
 		const chartData = {
 			labels: opt,
 	        datasets: [{
@@ -105,6 +118,9 @@ class PollsShow extends Component{
         	}
     	}
     
+    	
+
+
 		if(localStorage.getItem('votes')!==null){
 			var array = JSON.parse(localStorage.getItem('votes'));
 			if(array.indexOf(id)!==-1){
@@ -135,6 +151,7 @@ class PollsShow extends Component{
 									);
 								})}
 							</ul>
+							{this.renderNewOptions()}
 							<a className = "btn btn-primary" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fvotingapp.heroku.com&text=Vote%21" target="_blank">Tweet It</a>
 						</div>
 					

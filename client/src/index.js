@@ -41,7 +41,7 @@ ReactDOM.render(
           <Route path="/signout" component={Signout} />
           <Route path="/signup" component={Signup} />
           <Route path="/polls/:id/edit" component={RequireAuth(PollsEdit)} />
-          <Route path="/polls/:id/newoption" component={PollsNewOption} />
+          <Route path="/polls/:id/newoption" component={RequireAuth(PollsNewOption)} />
           <Route path="/polls/new" component={RequireAuth(PollsNew)} />
           <Route path="/mypolls" component={RequireAuth(MyPolls)} />
           <Route path="/feature" component={RequireAuth(Feature)} />

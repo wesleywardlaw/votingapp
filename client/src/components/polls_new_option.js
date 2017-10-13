@@ -15,7 +15,6 @@ const renderInput = field => {
 
 class PollsNewOption extends Component {
     handleFormSubmit(values) {
-        console.log(values);
         const { id } = this.props.match.params;
         this.props.addNewOption(id, values, () => {
         	this.props.history.push(`/polls/${id}`);

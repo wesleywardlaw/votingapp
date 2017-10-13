@@ -13,17 +13,14 @@ const renderOptions=({ fields }) =>{
 
 
 		  <ul className="list-group">
-		    {console.log(fields)}
 		  	<li className="list-group-item">
 		         <button className="btn btn-primary" type="button" onClick={() => fields.push('option', {})}>Add Option</button>
 		         <button className="btn btn-danger" type="button" onClick={() => fields.pop('option', {})}>Remove Option</button>
 		     </li>
 
 		    {fields.map((field, index) => {
-		    	console.log(field, " is so weird");
-		    	console.log(index);
 		    	return(
-		    		<div>
+		    		<div key={index}>
 		    			<li className="list-group-item"><Field name={field} component={renderField}  placeholder="option" className="form-control" /></li>
 						
 					</div>
@@ -60,7 +57,6 @@ class PollsNew extends Component {
 
 
   onSubmit(values){
-  		console.log(values);
 		this.props.createPoll(values, () => {
 			this.props.history.push('/');
 		});

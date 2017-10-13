@@ -21,7 +21,7 @@ const renderOptions=({ fields }) =>{
 
 		    {fields.map((field, index) => {
 		    	return(
-		    		<div>
+		    		<div key={index}>
 		    			<li className="list-group-item"><Field name={field} component={renderField}  placeholder="option" className="form-control" /></li>
 					</div>
 				);
@@ -58,16 +58,12 @@ class PollsEdit extends Component {
   componentDidMount(){
 		this.props.fetchPolls();
 		const { id } = this.props.match.params;
-		console.log(this.props.match.params.id);
 		this.props.fetchPoll(id);
 
 	}
 
   onSubmit(values){
-  		console.log(this.props);
-  		console.log(values);
   		const { id } = this.props.match.params;
-  		console.log(id);
 		this.props.editPoll(values, id, () => {
 			this.props.history.push(`/polls/${id}`);
 		});
