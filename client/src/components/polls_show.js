@@ -152,7 +152,7 @@ class PollsShow extends Component{
 								})}
 							</ul>
 							{this.renderNewOptions()}
-							<a className = "btn btn-primary" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fvotingapp.heroku.com&text=Vote%21" target="_blank">Tweet It</a>
+							<a className = "btn btn-primary" href={`https://twitter.com/intent/tweet?url=http%3A%2F%2Fvotingapp.heroku.com/polls/${id}&text=Vote%21`} target="_blank">Tweet It</a>
 						</div>
 					
 					</div>
