@@ -1,4 +1,4 @@
-#Voting App
+# Voting App
 
 This is a RESTful application that uses React, Redux, Passport, MongoDB, Express, and Node to allow users to create and share polls.
 
